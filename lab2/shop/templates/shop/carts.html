@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Список корзин</title>
+
+    <link rel="stylesheet" href="{% static 'shop/style.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Список корзин</h1>
+
+    <form method="get" class="filters">
+
+        <input
+            type="text"
+            name="search"
+            value="{{ search }}"
+            placeholder="Поиск по покупателю"
+        >
+
+        <select name="status">
+
+            <option value="">Все статусы</option>
+
+            {% for code, name in status_choices %}
+                <option
+                    value="{{ code }}"
+                    {% if status == code %}selected{% endif %}
+                >
+                    {{ name }}
+                </option>
+            {% endfor %}
+
+        </select>
+
+        <button type="submit">
+            Найти
+        </button>
+
+        <a href="{% url 'shop:carts_list' %}">
+            Сбросить
+        </a>
+
+    </form>
+
+
+    {% for cart in carts %}
+
+        <div class="cart">
+
+            <div class="cart-header">
+
+                <h2>
+                    Корзина #{{ cart.id }}
+                </h2>
+
+                <span class="status">
+                    {{ cart.get_status_display }}
+                </span>
+
+            </div>
+
+            <p>
+                <strong>Покупатель:</strong>
+                {{ cart.customer.name }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ cart.customer.email }}
+            </p>
+
+            <p>
+                <strong>Телефон:</strong>
+                {{ cart.customer.phone }}
+            </p>
+
+            <p>
+                <strong>Дата создания:</strong>
+                {{ cart.created_at|date:"d.m.Y H:i" }}
+            </p>
+
+            <h3>Товары</h3>
+
+            <ul>
+                {% for product in cart.products.all %}
+
+                    <li>
+                        {{ product.name }} — {{ product.price }} ₽
+                    </li>
+
+                {% empty %}
+
+                    <li>
+                        В корзине нет товаров
+                    </li>
+
+                {% endfor %}
+            </ul>
+
+            <p class="products-count">
+                Количество товаров:
+                <strong>{{ cart.products_count }}</strong>
+            </p>
+
+        </div>
+
+    {% empty %}
+
+        <p class="empty">
+            Корзины не найдены.
+        </p>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
