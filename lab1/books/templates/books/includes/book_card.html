@@ -1,0 +1,36 @@
+{% load book_tags %}
+
+<div class="book-card">
+
+    <div class="book-title">
+        <h3>{{ book.title }}</h3>
+
+        {% if book.is_available %}
+            <span class="available">
+                {{ book.is_available|availability_text }}
+            </span>
+        {% else %}
+            <span class="unavailable">
+                {{ book.is_available|availability_text }}
+            </span>
+        {% endif %}
+    </div>
+
+    <p class="author">{{ book.author }}</p>
+
+    <p class="description">
+        {{ book.description|truncatechars:140 }}
+    </p>
+
+    <p class="info">
+        {{ book.genre|title }} ·
+        {{ book.year }} год ·
+        {{ book.pages }} стр. ·
+        {{ book.pages|book_size }} книга
+    </p>
+
+    <p class="price">
+        {{ book.price|rubles }}
+    </p>
+
+</div>
