@@ -1,0 +1,33 @@
+{% extends 'books/base.html' %}
+{% load book_tags %}
+
+{% block title %}Каталог книг{% endblock %}
+
+{% block content %}
+
+<section class="catalog-header">
+    <h2>Каталог книг</h2>
+
+    {% books_count books as total %}
+    {% available_count books as available %}
+
+    <p>
+        Всего книг: {{ total }} · В наличии: {{ available }}
+    </p>
+</section>
+
+<div class="books">
+
+    {% for book in books %}
+
+        {% include 'books/includes/book_card.html' with book=book only %}
+
+    {% empty %}
+
+        <p class="empty">В каталоге пока нет книг.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
